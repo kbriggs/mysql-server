@@ -51,7 +51,7 @@ static int getWaitTime(const struct timespec& start_ts);
 
 static unsigned long long timespec_to_usec(const struct timespec *ts)
 {
-#ifndef __WIN__
+#if (!defined(__WIN__) || _MSC_VER >= 1900)
   return (unsigned long long) ts->tv_sec * TIME_MILLION + ts->tv_nsec / TIME_THOUSAND;
 #else
   return ts->tv.i64 / 10;
@@ -702,7 +702,7 @@ int ReplSemiSyncMaster::commitTrx(const char* trx_wait_binlog_name,
     }
 
     /* Calcuate the waiting period. */
-#ifdef __WIN__
+#if (defined(__WIN__) && _MSC_VER < 1900)
       abstime.tv.i64 = start_ts.tv.i64 + (__int64)wait_timeout_ * TIME_THOUSAND * 10;
       abstime.max_timeout_msec= (long)wait_timeout_;
 #else

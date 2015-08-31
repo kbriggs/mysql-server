@@ -90,6 +90,7 @@ typedef volatile LONG my_pthread_once_t;
   windows implementation of pthread_cond_timedwait
 */
 
+#if _MSC_VER < 1900
 /*
    Declare a union to make sure FILETIME is properly aligned
    so it can be used directly as a 64 bit value. The value
@@ -130,6 +131,7 @@ struct timespec {
 
 #define diff_timespec(TS1, TS2) \
   ((TS1.tv.i64 - TS2.tv.i64) * 100)
+#endif
 
 int win_pthread_mutex_trylock(pthread_mutex_t *mutex);
 int pthread_create(pthread_t *, const pthread_attr_t *, pthread_handler, void *);
